@@ -36,6 +36,7 @@ class LogView
     linesString = ''
     linesString += "<li>#{line}</li>" for line in lines
     @lines.append(linesString)
+    @lines.append("<br><br><br>")
 
   disableAutoScroll: (e) =>
     if (e.timeStamp > @timestamp) and @hasScroll() and @body.scrollTop() > 0
