@@ -57,7 +57,7 @@ class LogView
 
 
 class LogFeed
-  POLL_PERIOD: 1500
+  POLL_PERIOD: 3000
 
   constructor: (listener) ->
     @listener = listener
