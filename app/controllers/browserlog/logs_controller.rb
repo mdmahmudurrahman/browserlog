@@ -1,8 +1,8 @@
 module Browserlog
   class LogsController < ActionController::Base
-    before_filter :check_env
-    before_action :check_auth
     before_action :current_environment
+    before_action :check_env
+    before_action :check_auth
 
     layout 'browserlog/application'
 
