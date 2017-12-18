@@ -45,7 +45,7 @@ module Browserlog
     end
 
     def current_environment
-      @env = "staging"
+      @env = Rails.env
     end
 
     def format_log line
