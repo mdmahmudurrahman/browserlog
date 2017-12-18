@@ -6,6 +6,7 @@ module Browserlog
 
     layout 'browserlog/application'
 
+    # require 'pry'
     def index
       @filename = "#{@env}.log"
       @filepath = Rails.root.join("log/#{@filename}")
@@ -13,11 +14,12 @@ module Browserlog
 
     def changes
       lines, last_line_number = reader.read(offset: params[:currentLine].to_i, log_file_name: @env)
-
       respond_to do |format|
         format.json do
           render json: {
-            lines: lines.map! { |line| colorizer.colorize_line(line) },
+            lines: lines.map! { |line|
+              colorizer.colorize_line(format_log(line))
+            },
             last_line_number: last_line_number
           }
         end
@@ -43,7 +45,19 @@ module Browserlog
     end
 
     def current_environment
-      @env = Rails.env
+      @env = "staging"
+    end
+
+    def format_log line
+      if(Rails.env.staging? || Rails.env.production?)
+        if !(/^D/ =~ line).nil?
+          line.split(/DEBUG\s\--\s\:\s/)[1].strip unless line.split(/DEBUG\s\--\s\:\s/).empty?
+        elsif !(/^I/ =~ line).nil?
+          line.split(/INFO\s\--\s\:\s/)[1].strip unless line.split(/INFO\s\--\s\:\s/).empty?
+        end
+      else
+        line
+      end
     end
   end
 end
