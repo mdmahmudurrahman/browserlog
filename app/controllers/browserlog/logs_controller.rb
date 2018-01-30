@@ -14,7 +14,6 @@ module Browserlog
 
     def changes
       lines, last_line_number = reader.read(offset: params[:currentLine].to_i, log_file_name: @env)
-      # binding.pry
       respond_to do |format|
         format.json do
           render json: {
