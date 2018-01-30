@@ -14,6 +14,7 @@ module Browserlog
 
     def changes
       lines, last_line_number = reader.read(offset: params[:currentLine].to_i, log_file_name: @env)
+      # binding.pry
       respond_to do |format|
         format.json do
           render json: {
@@ -37,11 +38,21 @@ module Browserlog
     end
 
     def check_env
-      raise unless Browserlog.config.allowed_log_files.include?(@env)
+      unless Browserlog.config.allowed_log_files.include?(@env)
+        Rails.logger.info("###################################")
+        Rails.logger.info("########Log file doesn't exist#####")
+        Rails.logger.info("###################################")
+        raise
+      end
     end
 
     def check_auth
-      raise 'Logs not allowed on production environment.' if Rails.env.production? && !Browserlog.config.allow_production_logs
+      if(@env == "production" && !Browserlog.config.allow_production_logs)
+        Rails.logger.info("#######################################################")
+        Rails.logger.info("######Logs not allowed on production environment.######")
+        Rails.logger.info("#######################################################")
+        raise
+      end
     end
 
     def current_environment
@@ -49,7 +60,7 @@ module Browserlog
     end
 
     def format_log line
-      if(Rails.env.staging? || Rails.env.production?)
+      if(@env == "staging" || @env == "production")
         if !(/^D/ =~ line).nil?
           line.split(/DEBUG\s\--\s\:\s/)[1].strip unless line.split(/DEBUG\s\--\s\:\s/).empty?
         elsif !(/^I/ =~ line).nil?

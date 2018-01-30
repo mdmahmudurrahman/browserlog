@@ -7,7 +7,7 @@ module Browserlog
     attr_accessor :allow_production_logs, :allowed_log_files
 
     def initialize
-      @allow_production_logs = false
+      @allow_production_logs = true
       @allowed_log_files = %w(test development staging production)
     end
   end
