@@ -64,6 +64,8 @@ module Browserlog
           line.split(/DEBUG\s\--\s\:\s/)[1].strip unless line.split(/DEBUG\s\--\s\:\s/).empty?
         elsif !(/^I/ =~ line).nil?
           line.split(/INFO\s\--\s\:\s/)[1].strip unless line.split(/INFO\s\--\s\:\s/).empty?
+        else
+          line
         end
       else
         line
